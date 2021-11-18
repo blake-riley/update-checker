@@ -19,7 +19,8 @@ def check_for_updates(config_filename: Optional[str]) -> None:
         if not package.is_latest_release():
             error_strings.append(
                 f"{package} is out of date! "
-                f"({package.latest_release} != {package.current_tag})"
+                f"({package.latest_release} != {package.current_tag}) "
+                f"[from {config.config_filepath}]"
             )
             error_code = True
 
