@@ -2,60 +2,20 @@
 
 """Check repos for updated versions."""
 
-import os
-import pathlib
 import sys
-from argparse import ArgumentParser, Namespace
-from typing import Any, Deque, Optional
+from argparse import ArgumentParser
+from typing import Optional
 
-import yaml
-
-from .config import parse_config
+from . import configuration, globalvars
 
 
-def get_config(config_filename: Optional[str]) -> dict[str, Any]:
-    """Read the config file and returns a dictionary of the config."""
-    if not config_filename:
-        config_filename = "tracked_packages.yml"
-
-    search_paths = Deque(
-        [
-            pathlib.Path(".") / config_filename,
-            pathlib.Path.home() / ".config" / "update-checker" / config_filename,
-            pathlib.Path(__file__).parent.parent / config_filename,
-        ]
-    )
-    config_path = pathlib.Path(config_filename)
-    if config_path.is_absolute():
-        search_paths.appendleft(config_path)
-    env_config_path = os.environ.get("UPDATE_CHECKER_CONFIG_FILE")
-    if env_config_path:
-        search_paths.appendleft(pathlib.Path(env_config_path))
-
-    for config_path in search_paths:
-        try:
-            with open(config_path, "r") as f:
-                config: dict[str, Any] = yaml.load(f, Loader=yaml.SafeLoader)
-                return config
-        except IOError:
-            pass
-
-    raise FileNotFoundError(
-        f"Could not find a config file with name: {config_filename}!"
-    )
-
-
-def check_for_updates(config_filename: Optional[str], opts: Namespace) -> None:
+def check_for_updates(config_filename: Optional[str]) -> None:
     """Check for updates."""
-    config = get_config(config_filename)
-    if opts.verbose:
-        print(config)
-
-    tracked_packages = parse_config(config)
+    config = configuration.get_config(config_filename)
 
     error_code = False
     error_strings = []
-    for package in tracked_packages:
+    for package in config.tracked_packages:
         if not package.is_latest_release():
             error_strings.append(
                 f"{package} is out of date! "
@@ -74,7 +34,8 @@ def _entrypoint() -> None:
     parser.add_argument("config_filename", nargs="?", help="yaml config file")
     parser.add_argument("-v", "--verbose", action="store_true", help="Print more info")
     options = parser.parse_args()
-    check_for_updates(options.config_filename, options)
+    globalvars.OPTIONS |= options.__dict__
+    check_for_updates(options.config_filename)
 
 
 if __name__ == "__main__":
