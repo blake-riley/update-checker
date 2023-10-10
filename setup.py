@@ -8,7 +8,7 @@ def main() -> None:
         name="update-checker",
         version="0.1",
         description="Check repos for updated versions",
-        author="Blake Riley <briley1@gc.cuny.edu>",
+        author="Blake Riley <blake-riley@users.noreply.github.com>",
         zip_safe=True,
         python_requires=">=3.8,<4.0",
         install_requires=[
