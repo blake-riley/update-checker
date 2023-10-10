@@ -4,19 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "~=2.31"
-PyYAML = "~=6.0"
-pydantic = "~=1.8"
+requests = "<3,>=2.31"
+pyyaml = "<7,>=6.0"
+pydantic = ">=1.8,<2"
 
 [dev-packages]
-types-requests = "~=2.26"
-types-PyYAML = "~=6.0"
-pytest = "~=6.2"
-jupyterlab = "~=3.2.8"
-black = "~=21.4b0"
-pycodestyle = "~=2.8"
-pydocstyle = "~=6.1"
-mypy = "~=0.900"
+types-requests = ">=2.31,<3"
+types-pyyaml = "<7,>=6.0"
+pytest = ">=6.2,<7"
+jupyterlab = "<4,>=3.2.8"
+black = ">=21.4,<22"
+pycodestyle = "<3,>=2.8"
+pydocstyle = ">=6.1,<7"
+mypy = ">=1.0,<2"
 
 [requires]
 python_version = "3.10"
