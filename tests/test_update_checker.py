@@ -1,4 +1,4 @@
-from update_checker import __version__
+from update_checker import __version__  # type:ignore
 
 
 def test_version() -> None:
