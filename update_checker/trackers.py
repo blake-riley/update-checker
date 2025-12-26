@@ -16,6 +16,7 @@ class PackageTracker:
     current_tag: str = NotImplemented
 
     @abstractmethod
+    @cached_property
     def latest_release(self) -> str:
         """Get the latest online release version."""
         ...
